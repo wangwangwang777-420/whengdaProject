@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    主页
+{% endblock %}
+
+{% block content %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<script src="{% static 'js/jqthumb.min.js' %}"></script>
+<script>
+    //处理缩略图（新增：区分新闻/产品图片裁剪尺寸）
+    function DrawImage(hotimg, height = 250) {
+        $(hotimg).jqthumb({
+            width: '100%',  
+            height: height + 'px', // 动态高度
+            zoom: '1',    
+            method: 'auto' 
+        });
+    }
+</script>
+
+<!--广告横幅-->
+<div id="ad-carousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <ol class="carousel-indicators">
+        <li data-target="#ad-carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#ad-carousel" data-slide-to="1"></li>
+        <li data-target="#ad-carousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="{% static 'img/banner1.jpg' %}" alt="广告横幅1" class="img-responsive" style="width:100%; height:280px;">
+        </div>
+        <div class="item">
+            <img src="{% static 'img/banner2.jpg' %}" alt="广告横幅2" class="img-responsive" style="width:100%; height:280px;">
+        </div>
+        <div class="item">
+            <img src="{% static 'img/banner3.jpg' %}" alt="广告横幅3" class="img-responsive" style="width:100%; height:280px;">
+        </div>
+    </div>
+    <a class="left carousel-control" href="#ad-carousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#ad-carousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+</div>
+
+<!--主体内容-->
+<div class="container">
+    <!-- 第一行：企业概况 + 新闻动态 -->
+    <div class="row row-3">
+        <div class="col-md-4">
+            <!-- 企业概况 -->
+            <span class="part1">
+                <a href="{% url 'waboutApp:survey' %}">企业概况</a>
+            </span>
+            <span class="part1 en">
+                &nbsp;&nbsp;/ About Us
+            </span>
+            <div class="line1">
+                <div class="line2 theme"></div>
+            </div>
+            <div>
+                <img class="img-responsive" src="{% static 'img/aboutCompany.jpg' %}" alt="企业概况">
+                <p class="text1">
+                    恒达科技有限企业，位于中国某高新技术产业开发区，以社会公共安全领域为主要应用方向，提供极速、准确和防伪装的人脸识别产品。
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- 新闻动态 -->
+            <span class="part1">
+                <a href="#">新闻动态</a>
+            </span>
+            <span class="part1 en">
+                &nbsp;&nbsp;/ News
+            </span>
+            <a class="btn btn-default btn-xs more-btn" href="{% url 'wnewsApp:news' 'company' %}">&nbsp;更多</a>
+            <div class="line1">
+                <div class="line2 theme"></div>
+            </div>
+
+            <div class="row"> <!-- 新增row包裹，解决列布局错乱 -->
+                <div class="col-md-5">
+                    <div id="news-carousel" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators nav-point">
+                            {% if postList %}
+                                {% for post in postList %}
+                                <li data-target="#news-carousel" data-slide-to="{{forloop.counter0}}" {% if forloop.first %} class="active" {% endif %}></li>
+                                {% endfor %}
+                            {% else %}
+                                <li data-target="#news-carousel" data-slide-to="0" class="active"></li> <!-- 容错：无数据时显示空指示器 -->
+                            {% endif %}
+                        </ol>
+                        <!-- 轮播项目（容错：无数据时显示默认图） -->
+                        <div class="carousel-inner">
+                            {% if postList %}
+                                {% for post in postList %}
+                                <div class="item {% if forloop.first %}active{% endif %}" style="background-size:cover;"> <!-- 修复：删除多余逗号 -->
+                                    <a href="{% url 'newsApp:newsDetail' post.id %}">
+                                        <img src="{{post.photo.url}}" class="img-responsive" onload="DrawImage(this)" alt="{{post.title}}">
+                                    </a>
+                                    <div class="carousel-caption nav-title">{{post.title}}</div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="item active">
+                                    <img src="{% static 'img/default-news.jpg' %}" class="img-responsive" alt="暂无新闻">
+                                    <div class="carousel-caption nav-title">新闻展报</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <ul class="list-unstyled list-new">
+                        {% if newList %}
+                            {% for mynew in newList %}
+                            <li>
+                                <a href="{% url 'wnewsApp:newsDetail' mynew.id %}">{{mynew.title|truncatechars:"25"}}</a>
+                                <span>[{{mynew.publishDate|date:"Y-m-d"}}]</span>
+                            </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="text-center">暂无新闻动态</li> <!-- 容错：无数据提示 -->
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第二行：通知公告 + 科研基地 + 联系我们 -->
+    <div class="row row-3">
+        <div class="col-md-4">
+            <!-- 通知公告 -->
+            <span class="part1">
+                <a href="#">通知公告</a>
+            </span>
+            <span class="part1 en">
+                &nbsp;&nbsp;/ Public Release
+            </span>
+            <a class="btn btn-default btn-xs more-btn" href="{% url 'wnewsApp:news' 'notice' %}">&nbsp;更多</a>
+            <div class="line1">
+                <div class="line2 theme"></div>
+            </div>
+            <div>
+                <img class="img-responsive" src="{% static 'img/note.jpg' %}" alt="通知公告">
+                <ul class="list-unstyled list-new">
+                    {% if noteList %}
+                        {% for note in noteList %}
+                        <li>
+                            <a href="{% url 'wnewsApp:newsDetail' note.id %}">{{note.title|truncatechars:"25"}}</a>
+                            <a href="{% url 'wnewsApp:newsDetail' note.id %}" class="public-detail">查看详情>></a>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="text-center">暂无通知公告</li> <!-- 容错：无数据提示 -->
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- 科研基地（修复：删除多余的col-md-4嵌套） -->
+            <span class="part1">
+                <a href="{% url 'wscienceApp:science' %}">科研基地</a>
+            </span>
+            <span class="part1 en">
+                &nbsp;&nbsp;/ Technology Center
+            </span>
+            <div class="line1">
+                <div class="line2 theme"></div>
+            </div>
+            <div>
+                <a href="{% url 'wscienceApp:science' %}">
+                    <img class="img-responsive" src="{% static 'img/ky.jpg' %}" alt="科研基地">
+                </a>
+                <p class="text1">
+                    <font color="#d30a1c">亨达科技科研基地</font>
+                   亨达科研基地分为计算机视觉、机器人和视觉深度学习三个事业部,共拥有...
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- 联系我们 -->
+            <span class="part1">
+                <a href="{% url 'wcontactApp:contact' %}">联系我们</a>
+            </span>
+            <span class="part1 en">
+                &nbsp;&nbsp;/ Contact us
+            </span>
+            <div class="line1">
+                <div class="line2 theme"></div>
+            </div>
+            <div>
+                <ul class="list-unstyled procurement-li">
+                    <li>业务质询一：333-333333</li>
+                    <li>业务质询二：444-444444</li>
+                    <li>咨询电话：1234-12341234</li>
+                    <li>企业传真：5678-56785678</li>
+                    <li>地址：星光大道777号</li>
+                    <li>邮编：777777</li>
+                    <li>
+                        网址：<a href="https://python3web.com">https://python3web.com</a>
+                    </li>
+                </ul>
+                <div class="platform"><a href="{% url 'wcontactApp:contact' %}">详情</a></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第三行：产品中心（修复：删除多余row嵌套） -->
+    <div class="row row-3">
+        <div class="col-md-12">
+            <span class="part1">
+                <a href="{% url 'wproductApp:products' 'robot' %}">产品中心</a>
+            </span>
+            <span class="part1 en">
+                &nbsp;&nbsp;/ Products
+            </span>
+            <a class="btn btn-default btn-xs more-btn" href="{% url 'wproductApp:products' 'robot' %}">+&nbsp;更多</a>
+            <div class="line1" style="margin-bottom:5px;">
+                <div class="line2 theme"></div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-pro">
+            <div id="product-carousel" class="carousel slide" style="margin-bottom:30px">
+                <!-- 修复：删除无意义的隐藏指示器 -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="row">
+                            {% if productList %}
+                                {% for product in productList %}
+                                <div class="col-md-3 pro-images">
+                                    <a href="{% url 'wproductApp:productDetail' product.id %}" class="thumbnail">
+                                        {% if product.productImgs.all %}
+                                            {% for img in product.productImgs.all %}
+                                                {% if forloop.first %}
+                                                <img src="{{img.photo.url}}" alt="{{product.title}}" class="img-responsive" onload="DrawImage(this, 200)" alt="产品图片"> <!-- 产品图片裁剪为200px高 -->
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <img src="{% static 'img/default-product.jpg' %}" class="img-responsive" alt="默认产品图"> <!-- 容错：无产品图片 -->
+                                        {% endif %}
+                                    </a>
+                                    <div class="carousel-caption nav-title">{{product.title}}</div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-md-12 text-center">暂无产品信息</div> <!-- 容错：无数据提示 -->
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四行：友情链接 -->
+    <div class="row row-3">
+        <div class="col-md-12">
+            <!-- 可补充友情链接内容 -->
+        </div>
+    </div>
+</div>
+{% endblock %}

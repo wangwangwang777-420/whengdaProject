@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>亨达科技 | {% block title %}{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <!-- 顶部信息 -->
+    <div class="container top">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="{% url 'home' %}">
+                    <img class="img-responsive" src="{% static 'img/logo.png' %}" alt="亨达科技" style="width:160px; height:80px;">
+                </a>
+            </div>
+            <div class="col-md-3 hidden-xs">
+                <span class="glyphicon glyphicon-phone"></span> 电话：444 2222 9999
+            </div>
+            <div class="col-md-3 hidden-xs">
+                <span class="glyphicon glyphicon-envelope"></span> 邮箱：hengda@126.com
+            </div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav" style="width:100%;">
+                    <li class="nav-top {% if active_menu == 'home' %}active{% endif %}">
+                        <a href="{% url 'home' %}">主页</a>
+                    </li>
+
+                    <li class="dropdown nav-top {% if active_menu == 'about' %}active{% endif %}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于我们</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'waboutApp:survey' %}">企业概况</a></li>
+                            <li><a href="{% url 'waboutApp:honor' %}">荣誉资质</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown nav-top {% if active_menu == 'news' %}active{% endif %}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">咨询中心</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'wnewsApp:news' 'company' %}">企业要闻</a></li>
+                            <li><a href="{% url 'wnewsApp:news' 'industry' %}">行业新闻</a></li>
+                            <li><a href="{% url 'wnewsApp:news' 'notice' %}">通知公告</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown nav-top {% if active_menu == 'product' %}active{% endif %}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">产品中心</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'wproductApp:products' 'robot' %}">家用机器人</a></li>
+                            <li><a href="{% url 'wproductApp:products' 'monitor' %}">智能监控</a></li>
+                            <li><a href="{% url 'wproductApp:products' 'face' %}">人脸识别</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown nav-top {% if active_menu == 'service' %}active{% endif %}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">技术支持</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'wserviceApp:download' 'download' %}">资料下载</a></li>
+                            <li><a href="{% url 'wserviceApp:platform' %}">人脸识别开放平台</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 科研基地 -->
+                    <li class="nav-top {% if active_menu == 'science' %}active{% endif %}">
+                        <a href="{% url 'wscienceApp:science' %}">科研基地</a>
+                    </li>
+
+                    <!-- 加入我们 -->
+                    <li class="dropdown nav-top {% if active_menu == 'join' %}active{% endif %}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">加入我们</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'wcontactApp:contact' %}">欢迎咨询</a></li>
+                            <li><a href="{% url 'wcontactApp:recruit' %}">加入亨达</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主体内容 -->
+    <main class="container-fluid my-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 页脚 -->
+    <div class="container web-footer">
+        <div class="row" id="map-footer">
+            <div class="col-md-2">
+                <dl>
+                    <dt>关于我们</dt>
+                    <dd><a href="{% url 'waboutApp:survey' %}">企业概况</a></dd>
+                    <dd><a href="{% url 'waboutApp:honor' %}">荣誉资质</a></dd>
+                </dl>
+            </div>
+            <div class="col-md-2">
+                <dl>
+                    <dt>产品中心</dt>
+                    <dd><a href="{% url 'wproductApp:products' 'robot' %}">家用机器人</a></dd>
+                    <dd><a href="{% url 'wproductApp:products' 'monitor' %}">智能监控</a></dd>
+                    <dd><a href="{% url 'wproductApp:products' 'face' %}">人脸识别</a></li>
+                </dl>
+            </div>
+            <div class="col-md-2">
+                <dl>
+                    <dt>技术支持</dt>
+                    <dd><a href="{% url 'wserviceApp:download' 'download' %}">资料下载</a></dd>
+                    <dd><a href="{% url 'wserviceApp:platform' %}">人脸识别开放平台</a></dd>
+                </dl>
+            </div>
+            <div class="col-md-2">
+                <dl>
+                    <dt>人才招聘</dt>
+                    <dd><a href="{% url 'wcontactApp:contact' %}">欢迎咨询</a></dd>
+                    <dd><a href="{% url 'wcontactApp:recruit' %}">加入亨达</a></dd>
+                </dl>
+            </div>
+            <div class="col-md-4 text-center">
+                <p>扫描二维码，关注我们</p>
+                <img class="qrimg" src="{% static 'img/qr.png' %}" alt="微信二维码" style="width:120px;">
+                <p>客服热线：<strong style="font-size:20px;">444 2222 9999</strong></p>
+            </div>
+        </div>
+        <div class="row" id="patent-footer">
+            <p class="text-center">© {% now "Y" %} 版权所有 | 粤 7777</p>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $('.dropdown').hover(
+                function () { $(this).addClass('open'); },
+                function () { $(this).removeClass('open'); }
+            );
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+    <script type="text/JavaScript">
+        $('#{{sub_menu}}').addClass("active");
+    </script>
+</body>
+</html>

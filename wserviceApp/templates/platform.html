@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}人脸识别开放平台{% endblock %}
+
+{% block content %}
+<style>
+/* 基础样式 */
+.wrapper {width: 90%; margin: 20px auto; padding: 20px; font-family: "SimSun", serif; border: 1px solid #5269c5;}
+.module {margin: 20px 0;}
+.module-title {font-weight: bold; font-size: 16px; margin: 10px 0; text-decoration: underline;}
+.btn-detect {background: #333; color: #fff; border: none; padding: 5px 15px; cursor: pointer;}
+
+/* 模态框：按钮永久固定 */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 1px solid #5269c5;
+    padding: 20px;
+    z-index: 9999;
+    display: none;
+    width: 450px;
+    height: 450px;
+    flex-direction: column;
+}
+.modal.show {display: flex;}
+.modal-title {font-weight: bold; margin-bottom: 15px; text-align: center;}
+.modal-img-area {flex: 1; text-align: center; overflow: auto;}
+#previewImg {max-width: 100%; max-height: 300px; border: 1px solid #000; margin: 10px 0;}
+#fileInput {width: 100%; margin: 10px 0;}
+.modal-btn-area {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.modal-btn-area button {padding: 5px 10px; margin: 0 5px; cursor: pointer;}
+
+/* 核心：还原书籍代码块样式（带行号+滚动） */
+.code-wrapper {
+    border: 1px solid #000;
+    height: 280px; /* 匹配书籍高度，触发滚动 */
+    overflow-y: auto; /* 垂直滚动 */
+    overflow-x: hidden; /* 隐藏水平滚动 */
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    position: relative;
+}
+/* 行号列 */
+.code-linenums {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 30px;
+    height: 100%;
+    background: #f5f5f5;
+    border-right: 1px solid #000;
+    text-align: right;
+    padding-right: 5px;
+    line-height: 1.6;
+    color: #666;
+}
+/* 代码内容列 */
+.code-content {
+    margin-left: 40px; /* 给行号留空间 */
+    padding: 5px;
+    white-space: pre-wrap; /* 保留换行和空格 */
+}
+
+/* 调用结果样式 */
+.result-area {margin: 10px 0; border: 1px solid #000; padding: 10px;}
+.result-img {width: 300px; border: 1px solid #000; margin: 10px 0;}
+</style>
+
+<div class="wrapper">
+    <h2>人脸识别接口文档</h2>
+
+    <!-- 一、体验产品 -->
+    <div class="module">
+        <div class="module-title">一、体验产品</div>
+        <button class="btn-detect" onclick="openModal()">人脸检测</button>
+        
+        <!-- 人脸检测模态框 -->
+        <div id="detectModal" class="modal">
+            <div class="modal-title">face detection</div>
+            <div class="modal-img-area">
+                <img id="previewImg" src="{% static 'img/face_test.jpg' %}" alt="测试图">
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+            <div class="modal-btn-area">
+                <button onclick="closeModal()">关闭</button>
+                <button onclick="detectFace()" style="background: #333; color: #fff; border: none;">开始检测</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 二、API接口说明 -->
+    <div class="module">
+        <div class="module-title">二、API接口说明</div>
+        
+        <!-- 基本信息 -->
+        <div style="margin: 10px 0;">
+            <strong>基本信息：</strong><br>
+            请求类型：HTTP/HTTPS，请求方式：POST<br>
+            接口地址：http://myhengda.cn/serviceApp/facedetect/
+        </div>
+
+        <!-- 接口描述 -->
+        <div style="margin: 10px 0;">
+            <strong>接口描述：</strong><br>
+            人脸检测，此接口多用于调用人脸识别、人脸对比的接口之前，用于从图像数据中检测出人脸区域，并以矩形形式返回人脸检测结果。目前该接口仅供测试使用，调用该接口暂时不限调用次数。
+        </div>
+
+        <!-- 本地调用示例（1:1还原书籍代码+行号+滚动） -->
+        <div style="margin: 10px 0;">
+            <strong>本地调用示例：</strong>
+            <div class="code-wrapper">
+                <!-- 行号 -->
+                <div class="code-linenums">
+1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15
+                </div>
+                <!-- 代码内容（和书籍一字不差） -->
+                <div class="code-content">
+import cv2, requests
+# web地址(http://localhost:8000)+访问接口（facedetect）
+url = "http://localhost:8000/serviceApp/facedetect/"
+
+# 上传图像并检测
+tracker = None
+imgPath = "face.jpg" # 图像路径
+files = {
+    "image": ("filename2", open(imgPath, "rb"), "image/jpeg"),
+}
+
+req = requests.post(url, data=tracker, files=files).json()
+print("获取信息: {}".format(req))
+
+# 将检测结果框显示在图像上
+                </div>
+            </div>
+        </div>
+
+        <!-- 调用结果 -->
+        <div style="margin: 10px 0;">
+            <strong>调用结果：</strong>
+            <div class="result-area">
+                <img id="resultImg" class="result-img" src="" style="display: none;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 依赖JS + 核心逻辑 -->
+<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+<script>
+// 模态框控制
+function openModal() {
+    document.getElementById("detectModal").classList.add("show");
+    document.getElementById("fileInput").value = "";
+}
+function closeModal() {
+    document.getElementById("detectModal").classList.remove("show");
+}
+
+// 图片预览
+document.getElementById("fileInput").addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById("previewImg").src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+// 人脸检测
+function detectFace() {
+    const file = document.getElementById("fileInput").files[0];
+    if (!file) {
+        alert("请先选择图片！");
+        return;
+    }
+    const formData = new FormData();
+    formData.append("image", file);
+    
+    $.ajax({
+        url: "{% url 'wserviceApp:facedetectDemo' %}",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (data.img64) {
+                document.getElementById("previewImg").src = "data:image/jpeg;base64," + data.img64;
+                document.getElementById("resultImg").src = "data:image/jpeg;base64," + data.img64;
+                document.getElementById("resultImg").style.display = "block";
+                alert(`检测成功！共检测到 ${data['#faceNum']} 个人脸`);
+            } else {
+                alert("检测失败，请换清晰的人脸图片！");
+            }
+        },
+        error: function() {
+            alert("接口调用失败，请检查后端服务是否启动！");
+        }
+    });
+}
+</script>
+{% endblock %}

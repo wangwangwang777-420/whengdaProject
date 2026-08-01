@@ -1,0 +1,36 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}科研基地{% endblock %}
+
+{% block content %}
+<!-- 广告横幅 -->
+<div class="container-fluid">
+  <div class="row">
+    <img class="img-responsive model-img" src="{% static 'img/science.jpg' %}" alt="科研基地横幅" style="width:100%; height:280px;">
+  </div>
+</div>
+
+<!-- 主体内容 -->
+<div class="container">
+  <h2 class="model-details-title">科研基地介绍</h2>
+  <div class="model-details">
+    <p>
+      亨达科研基地是公司核心创新平台，聚焦机器人导航、人脸分析、行为识别领域，依托先进科研设备与院士领衔团队，承担多项重点课题。基地打通“研发-转化”链路，多项专利技术落地赋能产业，还与知名机构合作，助力恒达以科技驱动高质量发展，打造行业创新标杆。
+    </p>
+    <img class="img-responsive" src="{% static 'img/kyjd.jpg' %}" alt="科研基地实景" style="width:100%; height:550px; margin:20px 0;">
+
+    <h3>研究方向</h3>
+
+    <h5>机器人导航：</h5>
+    <p>机器人视觉与感知、机器人控制与规划、人机协作与交互、特种机器人技术</p>
+
+    <h5>人脸分析：</h5>
+    <p>人脸识别与身份验证、人脸属性分析、活体检测与防攻击技术、跨场景与跨种族识别</p>
+
+    <h5>行为识别：</h5>
+    <p>多模态融合行为识别、自监督学习行为识别、联邦学习行为识别、跨模态行为识别</p>
+  </div>
+</div>
+{% endblock %}

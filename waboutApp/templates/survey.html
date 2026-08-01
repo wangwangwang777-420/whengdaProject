@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}关于我们{% endblock %}
+
+{% block content %}
+<!--广告横幅-->
+<div class="container-fluid">
+    <div row>
+        <img class="img-responsive model-img" src="{% static 'img/about.jpg' %}" style="width:100%; height:280px;">
+    </div>
+</div>
+<!--主体内容-->
+<div class="container-fluid">
+  <div class="row row-3">
+    <!-- 侧边导航 -->
+    <div class="col-md-3">
+      <div class="model-title">关于我们</div>
+      <div class="model-list">
+        <ul class="list-group">
+          <li class="list-group-item" id="survey">
+            <a href="{% url 'waboutApp:survey' %}">企业概况</a>
+          </li>
+          <li class="list-group-item" id="honor">
+            <a href="{% url 'waboutApp:honor' %}">荣誉资质</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 右侧具体内容 -->
+    <div class="col-md-9">
+      <div class="container-fluid">
+        <h2 class="model-details-title">企业概况</h2>
+        <div class="model-details">
+        <p>
+        亨达科技成立于 2010 年，是一家专注于智能制造解决方案的高新技术企业。公司以 "科技赋能制造，创新引领未来" 为使命，为客户提供智能工厂规划、工业物联网系统开发及数字化转型咨询服务。凭借自主研发的核心技术和专业团队，已成功为汽车、电子、医疗等行业的 500 多家企业提供服务，助力客户实现数字化转型。未来将持续深耕工业互联网领域，打造智能制造新生态。
+        </p>
+        <img class="img-responsive" src="{% static 'img/aboutus.jpg' %}"  style="width:100%; height:auto; margin:20px 0;">
+        </div>
+  </div>
+</div>
+{% endblock %}

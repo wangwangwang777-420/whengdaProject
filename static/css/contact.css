@@ -1,0 +1,134 @@
+.contact-left h1 strong{
+  display: block;
+  color: #777;
+  font-size: 1.6rem;
+}
+.contact-left h1 span{
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 10px;
+}
+.contact-left ul{
+  padding: 0;
+}
+.contact-left li{
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  color: #777;
+  margin-top: 17px;
+}
+.contact-left li a{
+  color: #777;
+}
+
+/* ===== 高级手风琴 ===== */
+:root {
+  --accent: #ff6a00;          /* 主荧光色 */
+  --panel-bg: rgba(78, 78, 154, 0.65);
+  --blur: 12px;
+}
+
+#accordion {
+  margin-top: 40px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#accordion .panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid rgba(86, 84, 155, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(82, 98, 203, 0.36);
+  transition: transform .3s;
+}
+
+#accordion .panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.45);
+}
+
+/* 标题栏 */
+#accordion .panel-heading {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+#accordion .panel-title a {
+  display: block;
+  padding: 18px 50px 18px 24px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: .5px;
+  color: #e4e4e4;
+  text-decoration: none;
+  position: relative;
+  transition: all .35s ease;
+}
+
+/* 左侧荧光条 */
+#accordion .panel-title a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .35s;
+}
+
+#accordion .panel-title a:not(.collapsed)::before {
+  transform: scaleY(1);
+}
+
+/* 右侧箭头 */
+#accordion .panel-title a::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid rgba(255,255,255,.7);
+  transition: all .35s;
+}
+
+#accordion .panel-title a:not(.collapsed)::after {
+  transform: translateY(-50%) rotate(180deg);
+  border-top-color: var(--accent);
+}
+
+/* 悬停光晕 */
+#accordion .panel-title a:hover {
+  color: #fff;
+  text-shadow: 0 0 8px var(--accent);
+}
+
+/* 内容区淡入动画 */
+#accordion .panel-collapse {
+  background: rgba(20,20,30,.55);
+}
+
+#accordion .panel-body {
+  padding: 24px 30px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: #d0d0d0;
+  animation: fadeIn .6s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
